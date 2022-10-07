@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\Picture;
 use Illuminate\Http\Request;
 
 
@@ -61,6 +62,7 @@ class AlbumController extends Controller
      */
     public function edit(Album $album)
     {
+        //dd($id);
         return view('albums.edit',compact('album'));
     }
 
@@ -88,6 +90,20 @@ class AlbumController extends Controller
     {
        $album->delete();
        return redirect()->route('albums');
+
+    }
+
+    public function delete_album(Request $request)
+    {
+      if($request->choose=='all'){
+        Picture::where('album_id',$request->album_id)->delete();
+        Album::where('id',$request->album_id)->delete();
+      }
+      else{
+        Picture::where('album_id',$request->album_id)->update(['album_id'=>$request->move_to_album]);
+        Album::where('id',$request->album_id)->delete();
+      }
+      return redirect()->back();
 
     }
 }

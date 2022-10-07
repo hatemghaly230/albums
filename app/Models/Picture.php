@@ -11,6 +11,7 @@ class Picture extends Model
     protected $table    = 'pictures';
     protected $fillable = [
        'name',
-       'album_id'
+       'album_id',
+       'picture'
     ];
 }

@@ -17,6 +17,7 @@ class CreatePicturesTable extends Migration
             $table->id();
             $table->foreignId("album_id")->constrained("albums")->onUpdate("cascade")->onDelete("cascade")->nullable();
             $table->string("name")->nullable();
+            $table->string("picture")->nullable();
             $table->timestamps();
         });
     }

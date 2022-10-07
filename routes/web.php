@@ -26,12 +26,14 @@ Route::resource('albums', 'App\Http\Controllers\AlbumController', [
         'update' => 'albums.update'
     ]
 ]);
-Route::resource('pictures', 'App\Http\Controllers\PictureController', [
+Route::resource('album_pictures', 'App\Http\Controllers\PictureController', [
     'names' => [
-        'index' => 'pictures',
-        'store' => 'pictures.store',
-        'edit' => 'pictures.edit',
-        'update' => 'pictures.update'
+        'index' => 'album_pictures',
+        'store' => 'album_pictures.store',
+        'edit' => 'album_pictures.edit',
+        'update' => 'album_pictures.update'
     ]
 ]);
+Route::post('/delete_album', [App\Http\Controllers\AlbumController::class, 'delete_album'])->name('delete_album');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

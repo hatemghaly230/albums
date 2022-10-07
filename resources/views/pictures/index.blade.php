@@ -13,7 +13,8 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <a href="{{route('albums.create')}}" class="btn btn-success">Add</a>
+                        <a href="{{route('album_pictures.create',['id'=>$id])}}" class="btn btn-success">Add</a>
+                        <a href="{{route('albums')}}" class="btn btn-success">Albums Page</a>
                         <br><br>
                         <table class="table table-bordered">
                             <thead>
@@ -40,10 +41,10 @@
                                         {{$picture->name}}
                                     </td>
                                     <td>
-                                        {{$picture->name}}
+                                       <img src="{{asset('pictures/').'/'.$picture->picture}}" width="40" height="40">
                                     </td>
                                     <td>
-                                        <a href="{{ route('albums.edit',$picture->id) }}" class="btn btn-primary"><i class="fas fa-edit"></i>
+                                        <a href="{{ route('album_pictures.edit',$picture->id) }}" class="btn btn-primary"><i class="fas fa-edit"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger"  data-toggle="modal" data-target="#deleteAlbum{{$picture->id}}" class="dropdown-item"><i class="fa fa-trash"></i>
                                         </a>
@@ -60,7 +61,7 @@
                                                     <div class="modal-footer">
                                                         {!! Form::open([
                                                'method' => 'DELETE',
-                                               'route' => ['albums.destroy', $picture->id]
+                                               'route' => ['album_pictures.destroy', $picture->id]
                                                ]) !!}
                                                 {!! Form::submit('Yes', ['class' => 'btn btn-danger btn-flat']) !!}
                                                          <a class="btn btn-default" data-dismiss="modal">Cancel</a>

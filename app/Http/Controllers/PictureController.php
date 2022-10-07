@@ -14,8 +14,10 @@ class PictureController extends Controller
      */
     public function index()
     {
-        $pictures=Picture::where('album_id',$_GET['id'])->paginate(10);
-        return view('pictures.index',compact('pictures'));
+        //dd('dd');
+        $id=isset($_GET['id'])?$_GET['id']:null;
+        $pictures=Picture::where('album_id',$id)->paginate(10);
+        return view('pictures.index',compact('pictures','id'));
     }
 
     /**
@@ -25,7 +27,7 @@ class PictureController extends Controller
      */
     public function create()
     {
-        //
+        return view('pictures.add');
     }
 
     /**
@@ -36,7 +38,20 @@ class PictureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data =array();
+        $data['name'] =$request->name;
+        $data['album_id'] =$request->album_id;
+
+        if ($request->file('picture')) {
+            $picture = $request->file('picture');
+            $filename = date('YmdHi') . $picture->getClientOriginalName();
+            $picture->move(public_path('pictures'), $filename);
+            $data['picture'] =$filename;
+        }
+       // dd($data);
+        Picture::create($data);
+        return redirect()->route('album_pictures',['id'=> $data['album_id']]);
+
     }
 
     /**
@@ -56,9 +71,11 @@ class PictureController extends Controller
      * @param  \App\Models\Picture  $picture
      * @return \Illuminate\Http\Response
      */
-    public function edit(Picture $picture)
+    public function edit(Picture $picture,$id)
     {
-        //
+       // dd($picture);
+        $picture=Picture::find($id);
+        return view('pictures.edit',compact('picture'));
     }
 
     /**
@@ -68,9 +85,19 @@ class PictureController extends Controller
      * @param  \App\Models\Picture  $picture
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Picture $picture)
+    public function update(Request $request, $id)
     {
-        //
+        $data =array();
+         $data['name'] =$request->name;
+        $edit_pic=Picture::find($id);
+        if ($request->file('picture')) {
+            $picture = $request->file('picture');
+            $filename = date('YmdHi') . $picture->getClientOriginalName();
+            $picture->move(public_path('pictures'), $filename);
+            $data['picture'] =$filename;
+        }
+        $edit_pic->update($data);
+       return redirect()->route('album_pictures',['id'=> $edit_pic->album_id]);
     }
 
     /**
@@ -79,8 +106,11 @@ class PictureController extends Controller
      * @param  \App\Models\Picture  $picture
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Picture $picture)
+    public function destroy($id)
     {
-        //
+        $picture=Picture::find($id);
+        $picture->delete();
+        return redirect()->back();
+
     }
 }

@@ -40,7 +40,7 @@
                                         {{$album->name}}
                                     </td>
                                     <td>
-                                        <a href="{{ route('pictures',['id'=>$album->id]) }}" class="btn btn-warning"><i class="fas fa-eye"></i>
+                                        <a href="{{ route('album_pictures',['id'=>$album->id]) }}" class="btn btn-warning"><i class="fas fa-eye"></i>
                                         </a>
                                     </td>
                                     <td>
@@ -55,14 +55,33 @@
                                                         <h4 class="modal-title">Album Delete</h4>
 
                                                     </div>
+                                                    {!! Form::open([
+                                                        'method' => 'POST',
+                                                        'route' => ['delete_album', $album->id]
+                                                        ]) !!}
                                                     <div class="modal-body">
-                                                        Are you Sure?
+                                                        Choose:
+                                                        <input type="hidden" name="album_id" value="{{$album->id}}">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="choose" id="choose" value="all" checked>
+                                                            <label class="form-check-label" for="all">
+                                                                delete all the pictures in the album
+                                                            </label>
+                                                          </div>
+                                                          <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="choose" id="choose" value="move">
+                                                            <label class="form-check-label" for="exampleRadios2">
+                                                                move the pictures to another album
+                                                            </label>
+                                                          </div>
+                                                          <select id="album" class="form-control" name="move_to_album">
+                                                            @foreach (\App\Models\Album::where('id','<>',$album->id)->get() as $a )
+                                                            <option value="{{$a->id}}">{{$a->name}}</option>
+                                                            @endforeach
+                                                          </select>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        {!! Form::open([
-                                               'method' => 'DELETE',
-                                               'route' => ['albums.destroy', $album->id]
-                                               ]) !!}
+
                                                 {!! Form::submit('Yes', ['class' => 'btn btn-danger btn-flat']) !!}
                                                          <a class="btn btn-default" data-dismiss="modal">Cancel</a>
                                                 {!! Form::close() !!}
@@ -82,4 +101,9 @@
             </div>
         </div>
     </div>
+    <script>
+        $('input[name="choose"]').click(function(){
+            alert($(this).val());
+        });
+    </script>
 @endsection
